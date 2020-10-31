@@ -13,14 +13,21 @@ import RealmDemo from './src/views/RealmView';
 import {Provider} from 'react-redux';
 import store from './src/stores/store';
 
-import {Container, Content, Header, Left, Body, Icon} from 'native-base';
+import {NavigationContainer} from '@react-navigation/native';
+import {MainStackNavigator} from './src/navigation/StackNavigator';
+import DrawerNavigator from './src/navigation/DrawerNavigator';
 
 const App = () => {
   return (
     <>
       <Provider store={store}>
-        <Text>Hello</Text>
-        <RealmDemo />
+        <NavigationContainer>
+          <DrawerNavigator />
+          {/* <MainStackNavigator /> */}
+          {/* <Contacts />
+          <Text>Hello</Text> */}
+          {/* <RealmDemo /> */}
+        </NavigationContainer>
       </Provider>
     </>
   );

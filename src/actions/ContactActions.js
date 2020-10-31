@@ -5,9 +5,9 @@ import {
   DELETE_CONTACT,
   INSERT_CONTACTS,
 } from '../constants/Constants';
-export const insertContact = (contact) => ({
+export const insertContact = (contacts) => ({
   type: INSERT_CONTACTS,
-  payload: contact,
+  payload: contacts,
 });
 
 export const getContact = (id) => {

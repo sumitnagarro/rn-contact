@@ -32,6 +32,10 @@ const contactReducer = (state = initialState, action) => {
       break;
 
     case INSERT_CONTACTS:
+      //   return {
+      //     ...state,
+      //     contacts: action.payload,
+      //   };
       break;
 
     default:
