@@ -94,7 +94,7 @@ const Contacts = (props) => {
           }
           color="red"></Button> */}
 
-        <Button
+        {/* <Button
           title="Add contact"
           onPress={() => {
             props.navigation.navigate('Detail', {
@@ -102,7 +102,7 @@ const Contacts = (props) => {
               telephoneNumber: '',
               mobileNumber: '',
             }); //Blank object
-          }}></Button>
+          }}></Button> */}
         <FloatingAction
           actions={actions}
           overrideWithAction={true}

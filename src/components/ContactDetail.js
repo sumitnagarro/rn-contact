@@ -5,7 +5,11 @@ import Input from '../components/Input';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
 import Button from '../components/FormButton';
+import {connect} from 'react-redux';
 
+import {v4 as uuidv4} from 'uuid';
+
+import {getAllContacts, insertNewContact} from '../stores/store';
 const validate = (values) => {
   const errors = {};
   if (!values.name) {
@@ -16,29 +20,12 @@ const validate = (values) => {
   if (!values.mobileNumber) {
     errors.mobileNumber = 'Required';
   }
-  //else if (values.mobileNumber.match(/\d/g).length === 11) {
-  //     errors.mobileNumber = 'Minimum length of 11';
-  //   }
-  //   if (!values.telephoneNumber) {
-  //     errors.telephoneNumber = 'Required';
-  //   } else if (values.telephoneNumber.match(/\d/g).length === 11) {
-  //     errors.telephoneNumber = 'Minimum length of 11';
-  //   }
   return errors;
 };
 
 const SignupSchema = Yup.object().shape({
   name: Yup.string().min(4, 'Minimum length of 4').required('Required'),
-  mobileNumber: Yup.string()
-    .min(11, 'Minimum length of 11')
-    .max(11, 'Minimum length of 11')
-    .required('Required'),
-  email: Yup.string().email('Invalid email').required('Required'),
-  password: Yup.string().min(8, 'Minimum length of 8').required('Required'),
-  confirm_password: Yup.string()
-    .oneOf([Yup.ref('password'), null], 'Passwords must match')
-    .min(8, 'Minimum length of 8')
-    .required('Required'),
+  mobileNumber: Yup.string().required('Required'),
 });
 
 const ContactDetail = (props) => {
@@ -47,7 +34,7 @@ const ContactDetail = (props) => {
     item === undefined
       ? {
           favorite: false,
-          id: '',
+          id: undefined,
           mobileNumber: '',
           name: '',
           photo: '',
@@ -62,9 +49,23 @@ const ContactDetail = (props) => {
           name: data.name ?? '',
           mobileNumber: data.mobileNumber,
           telephoneNumber: data.telephoneNumber,
+          id: data.id,
+          photo: data.photo,
+          favorite: data.favorite,
         }}
-        onSubmit={(values) => {
+        onSubmit={async (values) => {
+          //Saving data in realm
           console.log(values);
+          if (values.id === undefined) {
+            //insert request
+            //Create Id
+            values.id = uuidv4().toString();
+            props.insertNewContact(values);
+          }
+          //Otherwise update contact
+
+          props.navigation.pop();
+          //props.insertNewContact(values);
         }}
         validate={validate}
         validationSchema={SignupSchema}>
@@ -77,7 +78,7 @@ const ContactDetail = (props) => {
           errors,
           isSubmitting,
         }) => {
-          console.log({values});
+          //console.log({values});
           return (
             <>
               <View>
@@ -168,4 +169,9 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ContactDetail;
+const mapDispatchToProps = {
+  getAllContacts,
+  insertNewContact,
+};
+
+export default connect(null, mapDispatchToProps)(ContactDetail);
