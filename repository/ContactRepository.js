@@ -40,3 +40,23 @@ export const getItem = async (schemaName, id) => {
   let item = realm.objects(schemaName.name).filtered(`id = "${id}"`);
   return item;
 };
+
+export const updateData = async (schemaName, data) => {
+  try {
+    const realm = await Realm.open({
+      schema: [schemaName],
+    });
+    //get db values using id
+    var item = realm.objects(schemaName.name).filtered(`id = "${data.id}"`);
+    if (item === null || item === undefined) {
+      console.log('Item does not exists to update.');
+      return;
+    }
+    realm.write(() => {
+      //updating data
+      realm.create(schemaName.name, data, 'modified');
+    });
+  } catch (error) {
+    console.log('-------Error in repository update method.--------', error);
+  }
+};

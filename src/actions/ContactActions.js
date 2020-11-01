@@ -29,7 +29,7 @@ export const updateContact = (contact) => ({
   payload: contact,
 });
 
-export const deleteContact = (id) => ({
+export const deleteContact = (contact) => ({
   type: DELETE_CONTACT,
-  payload: id,
+  payload: contact,
 });

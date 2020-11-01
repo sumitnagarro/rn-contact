@@ -26,17 +26,22 @@ const contactReducer = (state = initialState, action) => {
       break;
 
     case UPDATE_CONTACT:
-      break;
+      return {
+        ...state,
+        contacts: action.payload,
+      };
 
     case DELETE_CONTACT:
-      break;
+      return {
+        ...state,
+        contacts: action.payload,
+      };
 
     case INSERT_CONTACTS:
       return {
         ...state,
         contacts: action.payload,
       };
-      break;
 
     default:
       return state;

@@ -34,7 +34,7 @@ const Button = ({
 const styles = StyleSheet.create({
   containerStyle: {
     marginVertical: 10,
-    backgroundColor: 'grey',
+    backgroundColor: '#ff6600',
     paddingVertical: 10,
     borderRadius: 5,
   },

@@ -9,7 +9,12 @@ import {connect} from 'react-redux';
 
 import {v4 as uuidv4} from 'uuid';
 
-import {getAllContacts, insertNewContact} from '../stores/store';
+import {
+  getAllContacts,
+  insertNewContact,
+  updateExistingContact,
+  deleteSelectedContact,
+} from '../stores/store';
 const validate = (values) => {
   const errors = {};
   if (!values.name) {
@@ -29,6 +34,23 @@ const SignupSchema = Yup.object().shape({
 });
 
 const ContactDetail = (props) => {
+  const renderDelete = () => {
+    if (data.id != '' && data.id != undefined) {
+      return (
+        // <TouchableOpacity>
+        //   <Text>Delete me</Text>
+        // </TouchableOpacity>
+
+        <Button
+          onPress={async () => {
+            props.deleteSelectedContact(data.id);
+            props.navigation.pop();
+          }}
+          text="Delete contact"
+        />
+      );
+    }
+  };
   let {item} = props.route.params;
   const data =
     item === undefined
@@ -57,13 +79,14 @@ const ContactDetail = (props) => {
           //Saving data in realm
           console.log(values);
           if (values.id === undefined) {
+            console.log('Insert request in contact details.');
             //insert request
             //Create Id
             values.id = uuidv4().toString();
             props.insertNewContact(values);
           }
-          //Otherwise update contact
-
+          //Otherwise update contact request
+          props.updateExistingContact(values);
           props.navigation.pop();
           //props.insertNewContact(values);
         }}
@@ -114,6 +137,7 @@ const ContactDetail = (props) => {
                   onPress={handleSubmit}
                   text="Save contact"
                 />
+                {renderDelete()}
               </View>
             </>
           );
@@ -170,8 +194,9 @@ const styles = StyleSheet.create({
 });
 
 const mapDispatchToProps = {
-  getAllContacts,
+  deleteSelectedContact,
   insertNewContact,
+  updateExistingContact,
 };
 
 export default connect(null, mapDispatchToProps)(ContactDetail);
