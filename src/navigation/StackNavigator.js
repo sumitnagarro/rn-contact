@@ -19,9 +19,27 @@ const screenOptionStyle = {
 const MainStackNavigator = () => {
   return (
     <Stack.Navigator screenOptions={screenOptionStyle}>
-      <Stack.Screen name="Contacts" component={Contacts} />
-      <Stack.Screen name="FavoriteContacts" component={FavoriteContacts} />
-      <Stack.Screen name="Detail" component={ContactDetail} />
+      <Stack.Screen
+        name="Contacts"
+        component={Contacts}
+        options={{
+          title: 'Contacts',
+        }}
+      />
+      <Stack.Screen
+        name="FavoriteContacts"
+        component={FavoriteContacts}
+        options={{
+          title: 'Favorite contacts',
+        }}
+      />
+      <Stack.Screen
+        name="Detail"
+        component={ContactDetail}
+        options={{
+          title: 'Add/Update contact',
+        }}
+      />
     </Stack.Navigator>
   );
 };

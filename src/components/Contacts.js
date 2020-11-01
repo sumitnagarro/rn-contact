@@ -14,13 +14,14 @@ import {getAllContacts, insertNewContact} from '../stores/store';
 import {ContactSchema} from '../models/Contact';
 import {connect} from 'react-redux';
 import {v4 as uuidv4} from 'uuid';
+import {FloatingAction} from 'react-native-floating-action';
 const Contacts = (props) => {
   useEffect(() => {
     props.getAllContacts();
   }, []);
 
   const renderItem = ({item}) => {
-    console.log(item);
+    //console.log(item);
     return (
       <TouchableOpacity
         onPress={() => {
@@ -49,6 +50,14 @@ const Contacts = (props) => {
     );
   };
 
+  const actions = [
+    {
+      text: 'Add contact',
+      icon: require('../images/add.png'),
+      name: 'bt_accessibility',
+      position: 1,
+    },
+  ];
   const contacts = props.contacts;
   return (
     <Container>
@@ -63,7 +72,7 @@ const Contacts = (props) => {
           renderItem={renderItem}
           keyExtractor={(item) => item.id}
         />
-        <Button
+        {/* <Button
           title="Go to favorite contact"
           onPress={() => {
             props.navigation.navigate('FavoriteContacts');
@@ -83,7 +92,25 @@ const Contacts = (props) => {
               }),
             )
           }
-          color="red"></Button>
+          color="red"></Button> */}
+
+        <Button
+          title="Add contact"
+          onPress={() => {
+            props.navigation.navigate('Detail', {
+              name: '',
+              telephoneNumber: '',
+              mobileNumber: '',
+            }); //Blank object
+          }}></Button>
+        <FloatingAction
+          actions={actions}
+          overrideWithAction={true}
+          iconHeight={40}
+          onPressItem={() => {
+            props.navigation.navigate('Detail', {}); //Blank object
+          }}
+        />
       </Content>
     </Container>
   );
