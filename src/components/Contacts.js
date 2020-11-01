@@ -71,11 +71,11 @@ const Contacts = (props) => {
 
         <Button
           title="Add data"
-          onPress={() =>
+          onPress={async () =>
             props.dispatch(
               props.insertNewContact({
                 id: uuidv4().toString(),
-                name: 'hahahaha 2',
+                name: 'hahahaha 3',
                 telephoneNumber: 'hahahahah',
                 mobileNumber: '8989898',
                 favorite: true,

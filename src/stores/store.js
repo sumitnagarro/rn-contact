@@ -4,9 +4,9 @@ import thunk from 'redux-thunk';
 
 import contactReducer from '../reducers/ContactReducer';
 
-import {getContacts} from '../actions/ContactActions';
+import {getContacts, insertContact} from '../actions/ContactActions';
 
-import {getItems} from '../../repository/ContactRepository';
+import {getItems, insertData} from '../../repository/ContactRepository';
 import {ContactSchema} from '../models/Contact';
 
 export const getAllContacts = () => {

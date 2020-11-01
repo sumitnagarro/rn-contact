@@ -13,6 +13,9 @@ const ContactDetail = (props) => {
           justifyContent: 'center',
         }}>
         <Text>This is detail component. {item.name}</Text>
+        <Text>{item.mobileNumber}</Text>
+        <Text>{item.id}</Text>
+        <Text>{item.photo}</Text>
       </Content>
     </Container>
   );
