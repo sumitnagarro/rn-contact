@@ -5,6 +5,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import Contacts from '../components/Contacts';
 import FavoriteContacts from '../components/FavoriteContacts';
 import ContactDetail from '../components/ContactDetail';
+import {Button} from 'react-native';
 
 const Stack = createStackNavigator();
 
@@ -38,6 +39,13 @@ const MainStackNavigator = () => {
         component={ContactDetail}
         options={{
           title: 'Add/Update contact',
+          // headerRight: () => (
+          //   <Button
+          //     title="set fav"
+          //     onPress={() => {
+          //       console.warn('Fav button tapped.');
+          //     }}></Button>
+          // ),
         }}
       />
     </Stack.Navigator>

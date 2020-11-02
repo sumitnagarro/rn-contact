@@ -21,7 +21,6 @@ const Contacts = (props) => {
   }, []);
 
   const renderItem = ({item}) => {
-    //console.log(item);
     return (
       <TouchableOpacity
         onPress={() => {
@@ -30,19 +29,23 @@ const Contacts = (props) => {
         <View style={contactStyles.listItems}>
           <View style={contactStyles.listItem}>
             <Image
-              source={require('../images/image.jpg')}
+              source={
+                item.photo === undefined || item.photo === null
+                  ? require('../images/image.jpg')
+                  : {uri: `file://${item.photo}`}
+              }
               style={{
                 flex: 1.8,
                 width: 50,
                 height: 50,
-                borderRadius: 25,
+                borderRadius: 50 / 2,
                 justifyContent: 'center',
                 alignItems: 'center',
               }}
             />
             <View style={{flex: 10}}>
               <Text style={contactStyles.normalText}>{item.name}</Text>
-              <Text style={contactStyles.normalText}>{item.mobile}</Text>
+              <Text style={contactStyles.normalText}>{item.mobileNumber}</Text>
             </View>
           </View>
         </View>

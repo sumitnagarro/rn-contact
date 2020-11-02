@@ -4,9 +4,9 @@ export const ContactSchema = {
   properties: {
     id: {type: 'string'},
     name: {type: 'string'},
-    telephoneNumber: {type: 'string'},
+    telephoneNumber: {type: 'string?'},
     mobileNumber: {type: 'string'},
     favorite: {type: 'bool', default: false},
-    photo: {type: 'string', default: 'photopath'},
+    photo: {type: 'string?'},
   },
 };

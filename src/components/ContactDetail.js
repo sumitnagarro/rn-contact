@@ -1,6 +1,13 @@
-import React, {Component, useEffect} from 'react';
-import {Container, Content} from 'native-base';
-import {Text, View, StyleSheet, TouchableOpacity} from 'react-native';
+import React, {Component, useEffect, useState} from 'react';
+import {CheckBox, ListItem, Body} from 'native-base';
+import {
+  Text,
+  View,
+  StyleSheet,
+  ScrollView,
+  Image,
+  TouchableOpacity,
+} from 'react-native';
 import Input from '../components/Input';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
@@ -8,7 +15,7 @@ import Button from '../components/FormButton';
 import {connect} from 'react-redux';
 
 import {v4 as uuidv4} from 'uuid';
-
+import ImagePicker from 'react-native-image-picker';
 import {
   getAllContacts,
   insertNewContact,
@@ -34,6 +41,9 @@ const SignupSchema = Yup.object().shape({
 });
 
 const ContactDetail = (props) => {
+  useEffect(() => {
+    console.log(data);
+  }, []);
   const renderDelete = () => {
     if (data.id != '' && data.id != undefined) {
       return (
@@ -55,108 +65,154 @@ const ContactDetail = (props) => {
   const data =
     item === undefined
       ? {
-          favorite: false,
+          favorite: true,
           id: undefined,
           mobileNumber: '',
           name: '',
-          photo: '',
+          photo: undefined,
           telephoneNumber: '',
         }
       : item;
 
+  //Image picker
+
+  const [imagePath, setImagePath] = useState(data.photo);
+  chooseFile = () => {
+    var options = {
+      title: 'Select Image',
+      storageOptions: {
+        skipBackup: true,
+        path: 'images',
+      },
+    };
+    ImagePicker.showImagePicker(options, (response) => {
+      // console.log('Response = ', response);
+
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      } else {
+        let source = response;
+        console.log(source.path);
+
+        setImagePath(source.path);
+      }
+    });
+  };
+
   return (
     <View style={styles.container}>
-      <Formik
-        initialValues={{
-          name: data.name ?? '',
-          mobileNumber: data.mobileNumber,
-          telephoneNumber: data.telephoneNumber,
-          id: data.id,
-          photo: data.photo,
-          favorite: data.favorite,
-        }}
-        onSubmit={async (values) => {
-          //Saving data in realm
-          console.log(values);
-          if (values.id === undefined) {
-            console.log('Insert request in contact details.');
-            //insert request
-            //Create Id
-            values.id = uuidv4().toString();
-            props.insertNewContact(values);
-          }
-          //Otherwise update contact request
-          props.updateExistingContact(values);
-          props.navigation.pop();
-          //props.insertNewContact(values);
-        }}
-        validate={validate}
-        validationSchema={SignupSchema}>
-        {({
-          handleChange,
-          handleBlur,
-          handleSubmit,
-          values,
-          touched,
-          errors,
-          isSubmitting,
-        }) => {
-          //console.log({values});
-          return (
-            <>
-              <View>
-                <Input
-                  onChangeText={handleChange('name')}
-                  onBlur={handleBlur('name')}
-                  value={values.name}
-                  touched={touched.name}
-                  error={errors.name}
-                  label="Name"
-                />
+      <ScrollView style={{flex: 1}}>
+        <TouchableOpacity
+          style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}
+          onPress={() => {
+            chooseFile();
+            //props.navigation.pop();
+          }}>
+          <Image
+            source={
+              imagePath === undefined || imagePath === null
+                ? require('../images/image.jpg')
+                : {uri: `file://${imagePath}`}
+            }
+            style={{
+              width: 100,
+              flex: 1,
+              height: 100,
+              borderRadius: 100 / 2,
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          />
+        </TouchableOpacity>
+        <Formik
+          initialValues={{
+            name: data.name ?? '',
+            mobileNumber: data.mobileNumber,
+            telephoneNumber: data.telephoneNumber,
+            id: data.id,
+            photo: data.photo,
+            favorite: data.favorite,
+          }}
+          onSubmit={async (values) => {
+            //Saving data in realm
+            values.photo = imagePath;
+            console.log(values);
 
-                <Input
-                  onChangeText={handleChange('mobileNumber')}
-                  onBlur={handleBlur('mobileNumber')}
-                  value={values.mobileNumber}
-                  touched={touched.mobileNumber}
-                  error={errors.mobileNumber}
-                  label="Mobile Number"
-                />
-                <Input
-                  onChangeText={handleChange('telephoneNumber')}
-                  onBlur={handleBlur('telephoneNumber')}
-                  value={values.telephoneNumber}
-                  touched={touched.telephoneNumber}
-                  error={errors.telephoneNumber}
-                  label="Telephone Number"
-                />
-              </View>
-              <View style={styles.formAction}>
-                <Button
-                  {...isSubmitting}
-                  onPress={handleSubmit}
-                  text="Save contact"
-                />
-                {renderDelete()}
-              </View>
-            </>
-          );
-        }}
-      </Formik>
+            if (values.id === undefined) {
+              console.log('Insert request in contact details.');
+              //insert request
+              //Create Id
+              values.id = uuidv4().toString();
+              props.insertNewContact(values);
+            }
+            //Otherwise update contact request
+            props.updateExistingContact(values);
+            props.navigation.pop();
+            //props.insertNewContact(values);
+          }}
+          validate={validate}
+          validationSchema={SignupSchema}>
+          {({
+            handleChange,
+            handleBlur,
+            handleSubmit,
+            values,
+            touched,
+            errors,
+            isSubmitting,
+          }) => {
+            //console.log({values});
+            return (
+              <>
+                <View>
+                  <Input
+                    onChangeText={handleChange('name')}
+                    onBlur={handleBlur('name')}
+                    value={values.name}
+                    touched={touched.name}
+                    error={errors.name}
+                    label="Name"
+                  />
+
+                  <Input
+                    onChangeText={handleChange('mobileNumber')}
+                    onBlur={handleBlur('mobileNumber')}
+                    value={values.mobileNumber}
+                    touched={touched.mobileNumber}
+                    error={errors.mobileNumber}
+                    label="Mobile Number"
+                  />
+                  <Input
+                    onChangeText={handleChange('telephoneNumber')}
+                    onBlur={handleBlur('telephoneNumber')}
+                    value={values.telephoneNumber}
+                    touched={touched.telephoneNumber}
+                    error={errors.telephoneNumber}
+                    label="Telephone Number"
+                  />
+                </View>
+                <ListItem>
+                  <CheckBox checked={data.favorite} color="green" />
+                  <Body>
+                    <Text style={{marginLeft: 30}}>Favorite :</Text>
+                  </Body>
+                </ListItem>
+                <View style={styles.formAction}>
+                  <Button
+                    {...isSubmitting}
+                    onPress={handleSubmit}
+                    text="Save contact"
+                  />
+                  {renderDelete()}
+                </View>
+              </>
+            );
+          }}
+        </Formik>
+      </ScrollView>
     </View>
-    // <Container>
-    //   <Content
-    //     contentContainerStyle={{
-    //       flex: 1,
-    //       alignItems: 'center',
-    //       justifyContent: 'center',
-    //     }}>
-    //     <Text>This is detail component. {item.name}</Text>
-    //     <Text>{item.mobileNumber}</Text>
-    //     <Text>{item.id}</Text>
-    //     <Text>{item.photo}</Text>
-    //   </Content>
-    // </Container>
   );
 };
 
@@ -164,10 +220,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f3f3f3',
-    // alignItems: "center",
-    // justifyContent: "center",
+    paddingTop: 20,
     padding: 10,
-    paddingTop: 64,
   },
   header: {
     fontSize: 28,

@@ -12,6 +12,7 @@ import {
 } from '../actions/ContactActions';
 
 import {
+  getFavoriteItems,
   getItems,
   insertData,
   updateData,
@@ -23,6 +24,22 @@ export const getAllContacts = () => {
   return async (dispatch) => {
     try {
       const contacts = await getItems(ContactSchema);
+      // Todo: Sort the data
+      //contacts.sort((a, b) => a.name.localeCompare(b.name));
+      dispatch(getContacts(contacts));
+    } catch (error) {
+      console.log(
+        '----------Getting contacts from database Error---------',
+        error,
+      );
+    }
+  };
+};
+
+export const getAllFavoriteContacts = () => {
+  return async (dispatch) => {
+    try {
+      const contacts = await getFavoriteItems(ContactSchema);
       // Todo: Sort the data
       //contacts.sort((a, b) => a.name.localeCompare(b.name));
       dispatch(getContacts(contacts));
