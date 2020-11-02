@@ -2,8 +2,6 @@ import React from 'react';
 
 import {createDrawerNavigator} from '@react-navigation/drawer';
 
-import Contacts from '../components/Contacts';
-import FavoriteContacts from '../components/FavoriteContacts';
 import {MainStackNavigator, ContactStackNavigator} from './StackNavigator';
 const Drawer = createDrawerNavigator();
 
