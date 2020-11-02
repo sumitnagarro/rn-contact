@@ -1,5 +1,6 @@
 import {
   GET_CONTACTS,
+  GET_FAV_CONTACTS,
   GET_CONTACT_BY_ID,
   UPDATE_CONTACT,
   DELETE_CONTACT,
@@ -20,6 +21,12 @@ const contactReducer = (state = initialState, action) => {
       return {
         ...state,
         contacts: action.payload,
+      };
+
+    case GET_FAV_CONTACTS:
+      return {
+        ...state,
+        favContacts: action.payload,
       };
 
     case GET_CONTACT_BY_ID:

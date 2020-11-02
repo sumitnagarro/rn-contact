@@ -1,27 +1,19 @@
-import React, {Component, useEffect} from 'react';
-import {Container, Content, Header, Left, Icon} from 'native-base';
-import {
-  Button,
-  Text,
-  FlatList,
-  View,
-  TouchableOpacity,
-  Image,
-} from 'react-native';
+import React from 'react';
+import {Container, Content} from 'native-base';
+import {Text, FlatList, View, TouchableOpacity, Image} from 'react-native';
 import contactStyles from '../styles/ContactStyles';
 import {getAllFavoriteContacts} from '../stores/store';
 
-import {ContactSchema} from '../models/Contact';
+import {useFocusEffect} from '@react-navigation/native';
 import {connect} from 'react-redux';
-import {v4 as uuidv4} from 'uuid';
-import {FloatingAction} from 'react-native-floating-action';
 const FavoriteContacts = (props) => {
-  useEffect(() => {
-    props.getAllFavoriteContacts();
-  }, []);
+  useFocusEffect(
+    React.useCallback(() => {
+      props.getAllFavoriteContacts();
+    }, []),
+  );
 
   const renderItem = ({item}) => {
-    console.log(item);
     return (
       <TouchableOpacity
         onPress={() => {
@@ -54,7 +46,7 @@ const FavoriteContacts = (props) => {
     );
   };
 
-  const contacts = props.contacts;
+  const favContacts = props.favContacts;
   return (
     <Container>
       <Content
@@ -64,7 +56,7 @@ const FavoriteContacts = (props) => {
           justifyContent: 'center',
         }}>
         <FlatList
-          data={contacts}
+          data={favContacts}
           renderItem={renderItem}
           keyExtractor={(item) => item.id}
         />
@@ -74,7 +66,7 @@ const FavoriteContacts = (props) => {
 };
 
 const mapStateToProps = (state) => ({
-  contacts: state.contacts,
+  favContacts: state.favContacts,
 });
 
 const mapDispatchToProps = {

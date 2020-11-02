@@ -1,5 +1,6 @@
 import {
   GET_CONTACTS,
+  GET_FAV_CONTACTS,
   GET_CONTACT_BY_ID,
   UPDATE_CONTACT,
   DELETE_CONTACT,
@@ -20,6 +21,13 @@ export const getContact = (id) => {
 export const getContacts = (contacts) => {
   return {
     type: GET_CONTACTS,
+    payload: contacts,
+  };
+};
+
+export const getFavContacts = (contacts) => {
+  return {
+    type: GET_FAV_CONTACTS,
     payload: contacts,
   };
 };

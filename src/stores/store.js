@@ -6,6 +6,7 @@ import contactReducer from '../reducers/ContactReducer';
 
 import {
   getContacts,
+  getFavContacts,
   insertContact,
   updateContact,
   deleteContact,
@@ -24,9 +25,8 @@ export const getAllContacts = () => {
   return async (dispatch) => {
     try {
       const contacts = await getItems(ContactSchema);
-      // Todo: Sort the data
-      //contacts.sort((a, b) => a.name.localeCompare(b.name));
-      dispatch(getContacts(contacts));
+      const sortedContacts = contacts.sorted('name');
+      dispatch(getContacts(sortedContacts));
     } catch (error) {
       console.log(
         '----------Getting contacts from database Error---------',
@@ -42,7 +42,7 @@ export const getAllFavoriteContacts = () => {
       const contacts = await getFavoriteItems(ContactSchema);
       // Todo: Sort the data
       //contacts.sort((a, b) => a.name.localeCompare(b.name));
-      dispatch(getContacts(contacts));
+      dispatch(getFavContacts(contacts));
     } catch (error) {
       console.log(
         '----------Getting contacts from database Error---------',

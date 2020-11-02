@@ -1,4 +1,4 @@
-import React, {Component, useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {CheckBox, ListItem, Body} from 'native-base';
 import {
   Text,
@@ -17,7 +17,6 @@ import {connect} from 'react-redux';
 import {v4 as uuidv4} from 'uuid';
 import ImagePicker from 'react-native-image-picker';
 import {
-  getAllContacts,
   insertNewContact,
   updateExistingContact,
   deleteSelectedContact,
@@ -41,9 +40,6 @@ const SignupSchema = Yup.object().shape({
 });
 
 const ContactDetail = (props) => {
-  useEffect(() => {
-    console.log(data);
-  }, []);
   const renderDelete = () => {
     if (data.id != '' && data.id != undefined) {
       return (
@@ -65,7 +61,7 @@ const ContactDetail = (props) => {
   const data =
     item === undefined
       ? {
-          favorite: true,
+          favorite: false,
           id: undefined,
           mobileNumber: '',
           name: '',
@@ -77,6 +73,7 @@ const ContactDetail = (props) => {
   //Image picker
 
   const [imagePath, setImagePath] = useState(data.photo);
+  const [fav, setFav] = useState(data.favorite);
   chooseFile = () => {
     var options = {
       title: 'Select Image',
@@ -138,7 +135,8 @@ const ContactDetail = (props) => {
           onSubmit={async (values) => {
             //Saving data in realm
             values.photo = imagePath;
-            console.log(values);
+            values.favorite = fav;
+            //console.log(values);
 
             if (values.id === undefined) {
               console.log('Insert request in contact details.');
@@ -194,10 +192,16 @@ const ContactDetail = (props) => {
                   />
                 </View>
                 <ListItem>
-                  <CheckBox checked={data.favorite} color="green" />
                   <Body>
                     <Text style={{marginLeft: 30}}>Favorite :</Text>
                   </Body>
+                  <CheckBox
+                    checked={fav}
+                    color="green"
+                    onPress={() => {
+                      setFav(!fav);
+                    }}
+                  />
                 </ListItem>
                 <View style={styles.formAction}>
                   <Button

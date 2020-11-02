@@ -33,13 +33,14 @@ export const getItems = async (schemaName) => {
 };
 
 export const getFavoriteItems = async (schemaName) => {
-  console.log('In fav request');
   const realm = await Realm.open({
     schema: [schemaName],
   });
 
-  let items = realm.objects(schemaName.name).filtered('favorite=true');
-  console.log(items);
+  let items = realm
+    .objects(schemaName.name)
+    .filtered('favorite=true SORT(name ASC)');
+
   return items;
 };
 

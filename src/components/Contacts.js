@@ -1,24 +1,18 @@
-import React, {Component, useEffect} from 'react';
-import {Container, Content, Header, Left, Icon} from 'native-base';
-import {
-  Button,
-  Text,
-  FlatList,
-  View,
-  TouchableOpacity,
-  Image,
-} from 'react-native';
+import React from 'react';
+import {Container, Content} from 'native-base';
+import {Text, FlatList, View, TouchableOpacity, Image} from 'react-native';
 import contactStyles from '../styles/ContactStyles';
 import {getAllContacts, insertNewContact} from '../stores/store';
 
-import {ContactSchema} from '../models/Contact';
 import {connect} from 'react-redux';
-import {v4 as uuidv4} from 'uuid';
 import {FloatingAction} from 'react-native-floating-action';
+import {useFocusEffect} from '@react-navigation/native';
 const Contacts = (props) => {
-  useEffect(() => {
-    props.getAllContacts();
-  }, []);
+  useFocusEffect(
+    React.useCallback(() => {
+      props.getAllContacts();
+    }, []),
+  );
 
   const renderItem = ({item}) => {
     return (
@@ -75,37 +69,7 @@ const Contacts = (props) => {
           renderItem={renderItem}
           keyExtractor={(item) => item.id}
         />
-        {/* <Button
-          title="Go to favorite contact"
-          onPress={() => {
-            props.navigation.navigate('FavoriteContacts');
-          }}></Button>
 
-        <Button
-          title="Add data"
-          onPress={async () =>
-            props.dispatch(
-              props.insertNewContact({
-                id: uuidv4().toString(),
-                name: 'hahahaha 3',
-                telephoneNumber: 'hahahahah',
-                mobileNumber: '8989898',
-                favorite: true,
-                photo: 'D',
-              }),
-            )
-          }
-          color="red"></Button> */}
-
-        {/* <Button
-          title="Add contact"
-          onPress={() => {
-            props.navigation.navigate('Detail', {
-              name: '',
-              telephoneNumber: '',
-              mobileNumber: '',
-            }); //Blank object
-          }}></Button> */}
         <FloatingAction
           actions={actions}
           overrideWithAction={true}
